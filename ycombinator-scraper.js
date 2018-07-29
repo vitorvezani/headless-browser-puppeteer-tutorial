@@ -1,21 +1,36 @@
 const puppeteer = require('puppeteer');
-function run () {
+function run (pagesToScrape) {
     return new Promise(async (resolve, reject) => {
         try {
+            if (!pagesToScrape) {
+                pagesToScrape = 1;
+            }
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
             await page.goto("https://news.ycombinator.com/");
-            let urls = await page.evaluate(() => {
-                let results = [];
-                let items = document.querySelectorAll('a.storylink');
-                items.forEach((item) => {
-                    results.push({
-                        url:  item.getAttribute('href'),
-                        text: item.innerText,
+            let currentPage = 1;
+            let urls = [];
+            while (currentPage <= pagesToScrape) {
+                let newUrls = await page.evaluate(() => {
+                    let results = [];
+                    let items = document.querySelectorAll('a.storylink');
+                    items.forEach((item) => {
+                        results.push({
+                            url:  item.getAttribute('href'),
+                            text: item.innerText,
+                        });
                     });
+                    return results;
                 });
-                return results;
-            })
+                urls = urls.concat(newUrls);
+                if (currentPage < pagesToScrape) {
+                    await Promise.all([
+                        await page.click('a.morelink'),
+                        await page.waitForSelector('a.storylink')
+                    ])
+                }
+                currentPage++;
+            }
             browser.close();
             return resolve(urls);
         } catch (e) {
@@ -23,4 +38,4 @@ function run () {
         }
     })
 }
-run().then(console.log).catch(console.error);
+run(5).then(console.log).catch(console.error);
