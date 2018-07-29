@@ -1,0 +1,23 @@
+{
+  "name": "headless-browser-puppeteer",
+  "version": "1.0.0",
+  "description": "**Project to study Headless Browser with google Puppeteer**",
+  "main": "screenshot.js",
+  "dependencies": {
+    "puppeteer": "^1.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorvezani/headless-browser-puppeteer-tutorial.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitorvezani/headless-browser-puppeteer-tutorial/issues"
+  },
+  "homepage": "https://github.com/vitorvezani/headless-browser-puppeteer-tutorial#readme"
+}
