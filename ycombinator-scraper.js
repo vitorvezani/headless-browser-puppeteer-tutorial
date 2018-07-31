@@ -7,6 +7,14 @@ function run (pagesToScrape) {
             }
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
+            await page.setRequestInterception(true);
+            page.on('request', (request) => {
+                if (request.resourceType === 'document') {
+                    request.continue();
+                } else {
+                    request.abort();
+                }
+            });
             await page.goto("https://news.ycombinator.com/");
             let currentPage = 1;
             let urls = [];
